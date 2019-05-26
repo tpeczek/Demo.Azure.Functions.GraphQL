@@ -8,6 +8,7 @@ using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using GraphQL;
 using GraphQL.Server;
 using Demo.Azure.Functions.GraphQL.Schema;
+using Demo.Azure.Functions.GraphQL.Infrastructure;
 
 [assembly: FunctionsStartup(typeof(Demo.Azure.Functions.GraphQL.Startup))]
 
@@ -17,10 +18,10 @@ namespace Demo.Azure.Functions.GraphQL
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<IDocumentClient>((serviceProvider) => {
+            builder.Services.AddSingleton<IDocumentClient>(serviceProvider => {
                 DbConnectionStringBuilder cosmosDBConnectionStringBuilder = new DbConnectionStringBuilder
                 {
-                    ConnectionString = serviceProvider.GetRequiredService<IConfiguration>()["CosmosDBConnection"]
+                    ConnectionString = serviceProvider.GetRequiredService<IConfiguration>()[Constants.CONNECTION_STRING_SETTING]
                 };
 
                 if (cosmosDBConnectionStringBuilder.TryGetValue("AccountKey", out object accountKey) && cosmosDBConnectionStringBuilder.TryGetValue("AccountEndpoint", out object accountEndpoint))
@@ -40,7 +41,8 @@ namespace Demo.Azure.Functions.GraphQL
             {
                 options.ExposeExceptions = true;
             })
-            .AddGraphTypes(ServiceLifetime.Scoped);
+            .AddGraphTypes(ServiceLifetime.Scoped)
+            .AddDataLoader();
         }
     }
 }

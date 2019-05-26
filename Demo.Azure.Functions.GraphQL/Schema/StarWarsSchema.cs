@@ -9,7 +9,7 @@ namespace Demo.Azure.Functions.GraphQL.Schema
         public StarWarsSchema(IDependencyResolver dependencyResolver)
             : base(dependencyResolver)
         {
-            Query = dependencyResolver.Resolve<CharacterQuery>();
+            Query = dependencyResolver.Resolve<PlanetQuery>();
         }
     }
 }

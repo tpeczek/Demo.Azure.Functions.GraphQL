@@ -1,13 +1,13 @@
-﻿using GraphQL.Types;
-using Demo.Azure.Functions.GraphQL.Documents;
-using Microsoft.Azure.Documents;
-using Demo.Azure.Functions.GraphQL.Infrastructure;
-using Microsoft.Azure.Documents.Client;
-using System;
+﻿using System;
 using System.Linq;
-using GraphQL.DataLoader;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
+using GraphQL.Types;
+using GraphQL.DataLoader;
+using Demo.Azure.Functions.GraphQL.Documents;
+using Demo.Azure.Functions.GraphQL.Infrastructure;
 
 namespace Demo.Azure.Functions.GraphQL.Schema.Types
 {

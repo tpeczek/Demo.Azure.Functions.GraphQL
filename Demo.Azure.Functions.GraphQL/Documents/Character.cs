@@ -2,7 +2,7 @@
 
 namespace Demo.Azure.Functions.GraphQL.Documents
 {
-    internal class Character
+    public class Character
     {
         public string Id { get; set; }
 

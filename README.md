@@ -2,7 +2,7 @@
 
 Sample project for demonstrating GraphQL in Azure Functions. You can read more here:
 
-- [Serverless GraphQL with Azure Functions, GraphQL for .NET, and Cosmos DB](https://www.tpeczek.com/2018/09/an-early-look-at-reporting-api-in.html)
+- [Serverless GraphQL with Azure Functions, GraphQL for .NET, and Cosmos DB](https://www.tpeczek.com/2019/05/serverless-graphql-with-azure-functions.html)
 
 ## Donating
 

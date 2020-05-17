@@ -14,7 +14,7 @@ namespace Demo.Azure.Functions.GraphQL.Schema.Types
     internal class PlanetType: ObjectGraphType<Planet>
     {
         private static readonly Uri _planetsCollectionUri = UriFactory.CreateDocumentCollectionUri(Constants.DATABASE_NAME, Constants.CHARACTERS_COLLECTION_NAME);
-        private static readonly FeedOptions _feedOptions = new FeedOptions { MaxItemCount = -1, };
+        private static readonly FeedOptions _feedOptions = new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true };
 
         private readonly IDocumentClient _documentClient;
 

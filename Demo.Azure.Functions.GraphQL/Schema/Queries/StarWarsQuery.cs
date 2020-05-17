@@ -23,7 +23,7 @@ namespace Demo.Azure.Functions.GraphQL.Schema.Queries
 
             Field<ListGraphType<CharacterType>>(
                 "characters",
-                resolve: context => documentClient.CreateDocumentQuery<Character>(_charactersCollectionUri, _feedOptions)
+                resolve: context => documentClient.CreateDocumentQuery<Character>(_charactersCollectionUri, context.ToSqlQuerySpec(), _feedOptions)
             );
         }
     }

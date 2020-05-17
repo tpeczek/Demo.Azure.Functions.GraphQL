@@ -28,14 +28,14 @@ namespace Demo.Azure.Functions.GraphQL.Schema.Types
             Field<ListGraphType<CharacterType>>(
                 "characters",
                 resolve: context => {
-                    var dataLoader = dataLoaderContextAccessor.Context.GetOrAddCollectionBatchLoader<int, Character>("GetCharactersByHomeworldId", GetCharactersByHomeworldId);
+                    var dataLoader = dataLoaderContextAccessor.Context.GetOrAddCollectionBatchLoader<int, Character>("GetCharactersByHomeworldId", GetCharactersByHomeworldIdAsync);
 
                     return dataLoader.LoadAsync(context.Source.WorldId);
                 }
             );
         }
 
-        private Task<ILookup<int, Character>> GetCharactersByHomeworldId(IEnumerable<int> homeworldIds)
+        private Task<ILookup<int, Character>> GetCharactersByHomeworldIdAsync(IEnumerable<int> homeworldIds)
         {
             return Task.FromResult(_documentClient.CreateDocumentQuery<Character>(_planetsCollectionUri, _feedOptions)
                 .Where(c => homeworldIds.Contains(c.HomeworldId))

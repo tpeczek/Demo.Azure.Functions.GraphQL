@@ -23,6 +23,7 @@ namespace Demo.Azure.Functions.GraphQL.Schema.Queries
 
             Field<ListGraphType<CharacterType>>(
                 "characters",
+                arguments: new QueryArguments(new QueryArgument<IdGraphType> { Name = "characterId" }),
                 resolve: context => documentClient.CreateDocumentQuery<Character>(_charactersCollectionUri, context.ToSqlQuerySpec(), _feedOptions)
             );
         }

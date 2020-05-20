@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GraphQL.Types;
@@ -18,7 +19,21 @@ namespace Demo.Azure.Functions.GraphQL.Infrastructure
 
             queryTextStringBuilder.Append(" FROM c");
 
-            return new SqlQuerySpec(queryTextStringBuilder.ToString());
+            SqlParameterCollection parameters = new SqlParameterCollection();
+            if (context.Arguments.Count > 0)
+            {
+                queryTextStringBuilder.Append(" WHERE ");
+
+                foreach (KeyValuePair<string, object> argument in context.Arguments)
+                {
+                    queryTextStringBuilder.Append($"c.{Char.ToUpperInvariant(argument.Key[0])}{argument.Key.Substring(1)} = @{argument.Key} AND ");
+                    parameters.Add(new SqlParameter("@" + argument.Key, argument.Value));
+                }
+
+                queryTextStringBuilder.Length = queryTextStringBuilder.Length - 5;
+            }
+
+            return new SqlQuerySpec(queryTextStringBuilder.ToString(), parameters);
         }
     }
 }

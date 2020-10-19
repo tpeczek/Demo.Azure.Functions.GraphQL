@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Data.Common;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using GraphQL;
 using GraphQL.Server;
+using GraphQL.Execution;
+using GraphQL.SystemTextJson;
 using Demo.Azure.Functions.GraphQL.Schema;
 using Demo.Azure.Functions.GraphQL.Infrastructure;
 
@@ -33,16 +35,17 @@ namespace Demo.Azure.Functions.GraphQL
                 return null;
             });
 
-            builder.Services.AddScoped<IDependencyResolver>(serviceProvider => new FuncDependencyResolver(serviceProvider.GetRequiredService));
             builder.Services.AddScoped<StarWarsSchema>();
 
             builder.Services.AddSingleton<IDocumentExecuter>(new DocumentExecuter());
-            builder.Services.AddGraphQL(options =>
+            builder.Services.AddSingleton<IDocumentWriter>(new DocumentWriter());
+            builder.Services.AddSingleton<IErrorInfoProvider>(services =>
             {
-                options.ExposeExceptions = true;
-            })
-            .AddGraphTypes(ServiceLifetime.Scoped)
-            .AddDataLoader();
+                return new ErrorInfoProvider(new ErrorInfoProviderOptions { ExposeExceptionStackTrace = true });
+            });
+            builder.Services.AddGraphQL()
+                .AddGraphTypes(ServiceLifetime.Scoped)
+                .AddDataLoader();
         }
     }
 }

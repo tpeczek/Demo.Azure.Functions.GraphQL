@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using GraphQL;
-using GraphQL.Http;
 
 namespace Demo.Azure.Functions.GraphQL.Infrastructure
 {

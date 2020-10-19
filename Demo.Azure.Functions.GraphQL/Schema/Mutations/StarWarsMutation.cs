@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
+using GraphQL;
 using GraphQL.Types;
 using Demo.Azure.Functions.GraphQL.Documents;
 using Demo.Azure.Functions.GraphQL.Schema.Types;

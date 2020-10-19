@@ -14,10 +14,12 @@ namespace Demo.Azure.Functions.GraphQL
 {
     public class GraphQLFunction
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly IGraphQLExecuter<StarWarsSchema> _graphQLExecuter;
 
-        public GraphQLFunction(IGraphQLExecuter<StarWarsSchema> graphQLExecuter)
+        public GraphQLFunction(IServiceProvider serviceProvider, IGraphQLExecuter<StarWarsSchema> graphQLExecuter)
         {
+            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _graphQLExecuter = graphQLExecuter ?? throw new ArgumentNullException(nameof(graphQLExecuter));
         }
 
@@ -28,7 +30,7 @@ namespace Demo.Azure.Functions.GraphQL
         {
             try
             {
-                ExecutionResult executionResult = await _graphQLExecuter.ExecuteAsync(request);
+                ExecutionResult executionResult = await _graphQLExecuter.ExecuteAsync(_serviceProvider, request);
 
                 if (executionResult.Errors != null)
                 {

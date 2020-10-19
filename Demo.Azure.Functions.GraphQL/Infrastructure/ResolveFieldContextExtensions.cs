@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GraphQL.Types;
+using GraphQL;
 using Microsoft.Azure.Documents;
 
 namespace Demo.Azure.Functions.GraphQL.Infrastructure
 {
     internal static class ResolveFieldContextExtensions
     {
-        public static SqlQuerySpec ToSqlQuerySpec<TSource>(this ResolveFieldContext<TSource> context)
+        public static SqlQuerySpec ToSqlQuerySpec<TSource>(this IResolveFieldContext<TSource> context)
         {
             StringBuilder queryTextStringBuilder = new StringBuilder();
 
@@ -30,7 +30,7 @@ namespace Demo.Azure.Functions.GraphQL.Infrastructure
                     parameters.Add(new SqlParameter("@" + argument.Key, argument.Value));
                 }
 
-                queryTextStringBuilder.Length = queryTextStringBuilder.Length - 5;
+                queryTextStringBuilder.Length -= 5;
             }
 
             return new SqlQuerySpec(queryTextStringBuilder.ToString(), parameters);

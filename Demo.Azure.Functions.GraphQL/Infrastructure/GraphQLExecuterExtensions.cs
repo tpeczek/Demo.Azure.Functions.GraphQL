@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using GraphQL;
 using GraphQL.Server.Internal;
 using GraphQL.Server.Common;
+using GraphQL.Server.Transports.AspNetCore.SystemTextJson;
 
 namespace Demo.Azure.Functions.GraphQL.Infrastructure
 {
@@ -62,18 +63,16 @@ namespace Demo.Azure.Functions.GraphQL.Infrastructure
             return (
                 request.Query.TryGetValue(OPERATION_NAME_KEY, out var operationNameValues) ? operationNameValues[0] : null,
                 request.Query.TryGetValue(QUERY_KEY, out var queryValues) ? queryValues[0] : null,
-                request.Query.TryGetValue(VARIABLES_KEY, out var variablesValues) ? JsonSerializer.Deserialize<Dictionary<string, object>>(variablesValues[0]).ToInputs() : null
+                request.Query.TryGetValue(VARIABLES_KEY, out var variablesValues) ? GraphQLRequestDeserializer.DeserializeInputsFromJson(variablesValues[0]) : null
             );
         }
 
+        private static GraphQLRequestDeserializer GraphQLRequestDeserializer = new GraphQLRequestDeserializer(options => { options.PropertyNameCaseInsensitive = true; });
+
         private async static Task<(string operationName, string query, Inputs variables)> ExtractGraphQLAttributesFromJsonBodyAsync(HttpRequest request)
         {
-            GraphQLRequest graphQLRequest = await JsonSerializer.DeserializeAsync<GraphQLRequest>
-            (
-                request.Body,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-            );
-
+            var deserializationResult = await GraphQLRequestDeserializer.DeserializeFromJsonBodyAsync(request, new System.Threading.CancellationToken());
+            var graphQLRequest = deserializationResult.Single;
             return (
                 graphQLRequest.OperationName,
                 graphQLRequest.Query,

@@ -4,7 +4,7 @@
     {
         public const string CONNECTION_STRING_SETTING = "CosmosDBConnection";
 
-        public const string DATABASE_NAME = "Demo.Azure.Functions.GraphQL";
+        public const string DATABASE_NAME = "StarWars";
 
         public const string PLANETS_COLLECTION_NAME = "PlanetsCollection";
 
